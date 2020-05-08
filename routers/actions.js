@@ -7,9 +7,11 @@ router.get('/', async (req, res) => {
   try {
     const data = await db.get()
     res.status(200).json(data)
-  } catch(err) {
+  } catch (err) {
     console.error(err)
-    res.status(500).json({ error: "Couldn't fulfill request" })
+    res.status(500).json({
+      error: "Couldn't fulfill request"
+    })
   }
 })
 
@@ -19,59 +21,89 @@ router.get('/:id', async (req, res) => {
     const id = req.params.id
     const data = await db.get(id)
     res.status(200).json(data)
-  } catch(err) {
+  } catch (err) {
     console.error(err)
-    res.status(500).json({ error: "Couldn't fulfill request" })
+    res.status(500).json({
+      error: "Couldn't fulfill request"
+    })
   }
 })
 
 // POST: adds an action
 router.post('/', async (req, res) => {
   try {
-    const { project_id, description, notes } = req.body
-    if(!project_id || !description || !notes) {
-      res.status(400).json({ error: "requirements not met" })
+    const {
+      project_id,
+      description,
+      notes
+    } = req.body
+    if (!project_id || !description || !notes) {
+      res.status(400).json({
+        error: "requirements not met"
+      })
     } else {
-      const postToCreate = { ...req.body }
+      const postToCreate = {
+        ...req.body
+      }
       const createPost = await db.insert(postToCreate)
       res.status(201).json(createPost)
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err)
-    res.status(500).json({ error: "Couldn't fulfill request" })
+    res.status(500).json({
+      error: "Couldn't fulfill request"
+    })
   }
 })
 
 // PUT: updates an action by ID
 router.put('/:id', async (req, res) => {
   try {
-    const { project_id, description, notes } = req.body
+    const {
+      project_id,
+      description,
+      notes
+    } = req.body
     const id = req.params.id
-    if(project_id && description && notes) {
-      const update = await db.update(id, { project_id, description, notes })
+    if (project_id && description && notes) {
+      const update = await db.update(id, {
+        project_id,
+        description,
+        notes
+      })
       res.status(200).json(update)
     } else {
-      res.status(400).json({ error: "Requirements not met "})
+      res.status(400).json({
+        error: "Requirements not met "
+      })
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err)
-    res.status(500).json({ error: "Couldn't fulfill request" })
+    res.status(500).json({
+      error: "Couldn't fulfill request"
+    })
   }
 })
 
-// DELETE: deletes an action by ID
+// DELETE: deletes an action by ID 
 router.delete('/:id', async (req, res) => {
   try {
     const id = req.params.id
     const deletePost = await db.remove(id)
-    if(deletePost >= 1) {
-      res.status(200).json({ success: `removed ${deletePost} entries` })
+    if (deletePost >= 1) {
+      res.status(200).json({
+        success: `removed ${deletePost} entries`
+      })
     } else {
-      res.status(400).json({ error: `removed ${deletePost} entries` })
+      res.status(400).json({
+        error: `removed ${deletePost} entries`
+      })
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err)
-    res.status(500).json({ error: "Couldn't fulfill request" })
+    res.status(500).json({
+      error: "Couldn't fulfill request"
+    })
   }
 })
 
