@@ -66,6 +66,12 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const id = req.params.id
+    const deletePost = await db.remove(id)
+    if(deletePost >= 1) {
+      res.status(200).json({ success: `removed ${deletePost} entries` })
+    } else {
+      res.status(400).json({ error: `removed ${deletePost} entries` })
+    }
   } catch(err) {
     console.error(err)
     res.status(500).json({ error: "Couldn't fulfill request" })
