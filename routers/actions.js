@@ -29,12 +29,6 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { project_id, description, notes } = req.body
-    const getProjectById = await db.get(project_id)
-    if(!getProjectById) {
-      res.status(400).json({ error: `Project by id:${project_id} does not exist` })
-      return
-    }
-
     if(!project_id || !description || !notes) {
       res.status(400).json({ error: "requirements not met" })
     } else {
@@ -52,10 +46,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { project_id, description, notes } = req.body
-    const postToUpdate = await db.get(req.params.id)
-    const updatedPost = { ...postToUpdate, project_id, description, notes }
-    const update = await db.update(req.params.id, updatedPost)
-    res.status(200).json(update)
+    const id = req.params.id
+    if(project_id && description && notes) {
+      const update = await db.update(id, { project_id, description, notes })
+      res.status(200).json(update)
+    } else {
+      res.status(400).json({ error: "Requirements not met "})
+    }
   } catch(err) {
     console.error(err)
     res.status(500).json({ error: "Couldn't fulfill request" })
